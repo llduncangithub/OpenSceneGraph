@@ -77,6 +77,8 @@ DynamicLibrary* DynamicLibrary::loadLibrary(const std::string& libraryName)
 
     HANDLE handle = NULL;
 
+    OSG_DEBUG << "DynamicLibrary::try to load library \"" << libraryName << "\"" << std::endl;
+    
     std::string fullLibraryName = osgDB::findLibraryFile(libraryName);
     if (!fullLibraryName.empty()) handle = getLibraryHandle( fullLibraryName ); // try the lib we have found
     else handle = getLibraryHandle( libraryName ); // haven't found a lib ourselves, see if the OS can find it simply from the library name.
@@ -113,6 +115,11 @@ DynamicLibrary::HANDLE DynamicLibrary::getLibraryHandle( const std::string& libr
     return handle;
 #else // other unix
 
+#if defined(__ANDROID__)
+    // Library can be found in APK/lib/armeabi-v7a etc.
+    // Should not be prefaced with './'
+    std::string localLibraryName = libraryName;
+#else
     // dlopen will not work with files in the current directory unless
     // they are prefaced with './'  (DB - Nov 5, 2003).
     std::string localLibraryName;
@@ -120,6 +127,7 @@ DynamicLibrary::HANDLE DynamicLibrary::getLibraryHandle( const std::string& libr
         localLibraryName = "./" + libraryName;
     else
         localLibraryName = libraryName;
+#endif
 
     handle = dlopen( localLibraryName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if( handle == NULL )

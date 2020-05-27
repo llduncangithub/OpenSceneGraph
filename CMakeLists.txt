@@ -3,8 +3,8 @@
 #
 SET(OPENSCENEGRAPH_MAJOR_VERSION 3)
 SET(OPENSCENEGRAPH_MINOR_VERSION 6)
-SET(OPENSCENEGRAPH_PATCH_VERSION 2)
-SET(OPENSCENEGRAPH_SOVERSION 157)
+SET(OPENSCENEGRAPH_PATCH_VERSION 5)
+SET(OPENSCENEGRAPH_SOVERSION 161)
 
 
 # set to 0 when not a release candidate, non zero means that any generated
@@ -41,6 +41,8 @@ IF(APPLE)
     OSG_OSX_VERSION "${OSG_OSX_VERSION}")
 ENDIF()
 
+PROJECT(OpenSceneGraph)
+
 # Set OSX architecture flags here, since they must be specified before
 # creating the actual OSG project.
 # Note that the CMAKE_OSX_* variables are not well documented in
@@ -48,67 +50,74 @@ ENDIF()
 # See https://cmake.org/Bug/view.php?id=14695#c34953
 # Additionally, OSG_WINDOWING_SYSTEM is set here for OSX since its
 # value is needed to find the correct version of OpenGL (X11 or Cocoa).
-IF(APPLE AND NOT ANDROID)
 
-  # Here we check if the user specified IPhone SDK
-  # These options are formally defined later, but can also be specified
-  # by the user at the command line using the cmake -D switch
-  # Note that FORCE is used since the user will likely enable IPhone
-  # build via CMake GUI after already having configured once
-  IF(OSG_BUILD_PLATFORM_IPHONE OR OSG_BUILD_PLATFORM_IPHONE_SIMULATOR)
-    SET(OSG_WINDOWING_SYSTEM "IOS" CACHE STRING "Windowing system type for graphics window creation, options only IOS.")
+IF(ANDROID)
+    SET(OSG_WINDOWING_SYSTEM "None" CACHE STRING "Windowing system type for graphics window creation; options: None.")
+ELSEIF(WIN32 OR MINGW)
+    SET(OSG_WINDOWING_SYSTEM "Win32" CACHE STRING "Windowing system type for graphics window creation; options: Win32 or None.")
+ELSEIF(APPLE)
+    # custom option to flag an iOS build
+    OPTION(OSG_BUILD_PLATFORM_IPHONE "Enable IPhoneSDK Device support" OFF)
 
-    #set iphone arch and flags taken from http://sites.google.com/site/michaelsafyan/coding/resources/how-to-guides/cross-compile-for-the-iphone/how-to-cross-compile-for-the-iphone-using-cmake
     IF(OSG_BUILD_PLATFORM_IPHONE)
-      IF(${IPHONE_VERSION_MIN} LESS "7.0")
-        SET(CMAKE_OSX_ARCHITECTURES "armv6;armv7" CACHE STRING "Build architectures for iOS" FORCE)
-      ELSE()
-        SET(CMAKE_OSX_ARCHITECTURES "armv7;armv7s;arm64" CACHE STRING "Build architectures for iOS" FORCE)
-      ENDIF()
+
+        # set sdk and min versions
+        SET (IPHONE_SDKVER "10.2" CACHE STRING "IOS SDK-Version")
+        SET (IPHONE_VERSION_MIN "7.0" CACHE STRING "IOS minimum os version, use 7.0 or greater to get 64bit support")
+
+        # get full path to sdk from requested versions
+        SET (IPHONE_DEVROOT "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer")
+        SET (IPHONE_SDKROOT "${IPHONE_DEVROOT}/SDKs/iPhoneOS${IPHONE_SDKVER}.sdk")
+
+        # optionally enable bitcode for the build
+        SET (IPHONE_ENABLE_BITCODE "NO" CACHE STRING "IOS Enable Bitcode")
+
+        # seamless toggle between device and simulator
+        SET(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator" CACHE STRING "Xcode effective platforms for iOS")
+
+        # set deployment target to min version
+        SET(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${IPHONE_VERSION_MIN}" CACHE STRING "Xcode deployment target for iOS")
+
+        # Set standard architectures
+        SET(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD)" CACHE STRING "Build architectures for iOS")
 
     ELSE()
-      #simulator uses i386 and x86_64 architectures
-      SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64" CACHE STRING "Build architectures for iOS Simulator" FORCE)
-    ENDIF()
+        # OSX >= 10.5 uses Cocoa windowing system, otherwise Carbon
+        IF(OSG_OSX_VERSION VERSION_LESS 10.5)
+            SET(OSG_WINDOWING_SYSTEM "Carbon" CACHE STRING "Windowing system type for graphics window creation; options: Carbon, Cocoa, X11 or None.")
+			SET(OSG_WINDOWING_SYSTEM_CARBON ON INTERNAL "use Carbon (apple; 32 bit only)")
+        ELSE()
+            SET(OSG_WINDOWING_SYSTEM "Cocoa" CACHE STRING "Windowing system type for graphics window creation; options: Carbon, Cocoa, X11 or None.")
+        ENDIF()
 
-    #here we set the specific iphone sdk version. We can only set either device or simulator sdk. So if you want both you currently have to have two separate projects
-    SET(CMAKE_OSX_SYSROOT "${IPHONE_SDKROOT}" CACHE STRING "System root for iOS" FORCE)
-
-  ELSE()
-    # OSX >= 10.5 uses Cocoa windowing system, otherwise Carbon
-    IF(OSG_OSX_VERSION VERSION_LESS 10.5)
-      SET(OSG_WINDOWING_SYSTEM "Carbon" CACHE STRING "Windowing system type for graphics window creation, options Carbon, Cocoa or X11.")
-    ELSE()
-      SET(OSG_WINDOWING_SYSTEM "Cocoa" CACHE STRING "Windowing system type for graphics window creation, options Carbon, Cocoa or X11.")
+        # Set defaults for Universal Binaries. We want 32-bit Intel/PPC on 10.4
+        # and 32/64-bit Intel/PPC on >= 10.5. Anything <= 10.3 doesn't support.
+        # These are set the first time CMake is run, and can be changed by
+        # the user at any time.
+        IF(OSG_OSX_VERSION VERSION_GREATER 10.7)
+            # 64 Bit Works, i386,ppc is not supported any more
+            SET(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build architectures for OSX")
+            SET(CMAKE_OSX_DEPLOYMENT_TARGET "10.8" CACHE STRING "Target OSX version")
+        ELSEIF(OSG_OSX_VERSION VERSION_EQUAL 10.7)
+            # 64 Bit Works, PPC is not supported any more
+            SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64" CACHE STRING "Build architectures for OSX")
+        ELSEIF(OSG_OSX_VERSION VERSION_GREATER 10.4)
+            # 64-bit compiles are not supported with Carbon.
+            SET(CMAKE_OSX_ARCHITECTURES "ppc;i386" CACHE STRING "Build architectures for OSX")
+            SET(CMAKE_OSX_DEPLOYMENT_TARGET "10.5" CACHE STRING "Target OSX version")
+        ELSEIF(OSG_OSX_VERSION VERSION_EQUAL 10.4)
+            # 64-bit compiles are not supported with Carbon.
+            SET(CMAKE_OSX_ARCHITECTURES "ppc;i386" CACHE STRING "Build architectures for OSX")
+        ELSE()
+            # No Universal Binary support and SDK detection is too unreliable.
+            # Warn user and continue at their own peril.
+            MESSAGE(WARNING "OSX 10.3 and earlier not supported.")
+        ENDIF()
     ENDIF()
-
-    # Set defaults for Universal Binaries. We want 32-bit Intel/PPC on 10.4
-    # and 32/64-bit Intel/PPC on >= 10.5. Anything <= 10.3 doesn't support.
-    # These are set the first time CMake is run, and can be changed by
-    # the user at any time.
-    IF(OSG_OSX_VERSION VERSION_GREATER 10.7)
-      # 64 Bit Works, i386,ppc is not supported any more
-      SET(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build architectures for OSX")
-      SET(CMAKE_OSX_DEPLOYMENT_TARGET "10.8" CACHE STRING "Target OSX version")
-    ELSEIF(OSG_OSX_VERSION VERSION_EQUAL 10.7)
-      # 64 Bit Works, PPC is not supported any more
-      SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64" CACHE STRING "Build architectures for OSX")
-    ELSEIF(OSG_OSX_VERSION VERSION_GREATER 10.4)
-      # 64-bit compiles are not supported with Carbon.
-      SET(CMAKE_OSX_ARCHITECTURES "ppc;i386" CACHE STRING "Build architectures for OSX")
-      SET(CMAKE_OSX_DEPLOYMENT_TARGET "10.5" CACHE STRING "Target OSX version")
-    ELSEIF(OSG_OSX_VERSION VERSION_EQUAL 10.4)
-      # 64-bit compiles are not supported with Carbon.
-      SET(CMAKE_OSX_ARCHITECTURES "ppc;i386" CACHE STRING "Build architectures for OSX")
-    ELSE()
-      # No Universal Binary support and SDK detection is too unreliable.
-      # Warn user and continue at their own peril.
-      MESSAGE(WARNING "OSX 10.3 and earlier not supported.")
-    ENDIF()
-  ENDIF()
+ELSE()
+    SET(OSG_WINDOWING_SYSTEM "X11" CACHE STRING "Windowing system type for graphics window creation; options: X11 or None.")
 ENDIF()
 
-PROJECT(OpenSceneGraph)
 
 SET(OPENSCENEGRAPH_VERSION ${OPENSCENEGRAPH_MAJOR_VERSION}.${OPENSCENEGRAPH_MINOR_VERSION}.${OPENSCENEGRAPH_PATCH_VERSION})
 
@@ -218,40 +227,15 @@ ENDIF(OSG_MAINTAINER)
 
 IF(NOT ANDROID)
 IF(APPLE)
-    # Trying to get CMake to generate an XCode IPhone project, current efforts are to get iphoneos sdk 3.1 working
-    # Added option which needs manually setting to select the IPhone SDK for building. We can only have one of the below
-    # set to true. Should really have an OSG_BUILD_PLATFORM variable that we set to our desired platform
-    OPTION(OSG_BUILD_PLATFORM_IPHONE "Enable IPhoneSDK Device support" OFF)
-    OPTION(OSG_BUILD_PLATFORM_IPHONE_SIMULATOR "Enable IPhoneSDK Simulator support" OFF)
 
-    IF(OSG_BUILD_PLATFORM_IPHONE OR OSG_BUILD_PLATFORM_IPHONE_SIMULATOR)
+    IF(OSG_BUILD_PLATFORM_IPHONE)
 
-        #you need to manually set the default sdk version here
-        SET (IPHONE_SDKVER "10.2" CACHE STRING "IOS SDK-Version")
-        SET (IPHONE_VERSION_MIN "7.0" CACHE STRING "IOS minimum os version, use 7.0 or greater to get 64bit support")
+        # set the sdk path as our sysroot, if we set this before the project is defined cmake fails to build its test program
+        SET(CMAKE_OSX_SYSROOT "${IPHONE_SDKROOT}" CACHE STRING "System root for iOS" FORCE)
 
-        #the below is taken from ogre, it states the gcc stuff needs to happen before PROJECT() is called. I've no clue if we even need it
-        # Force gcc <= 4.2 on iPhone
-        IF(IPHONE_VERSION_MIN LESS "6.0")
-            include(CMakeForceCompiler)
-            CMAKE_FORCE_C_COMPILER(llvm-gcc-4.2 GNU)
-            CMAKE_FORCE_CXX_COMPILER(llvm-gcc-4.2 GNU)
-            SET(GCC_THUMB_SUPPORT NO)
-        ENDIF()
+        # Set the path to OpenGL library
+        SET(OPENGL_gl_LIBRARY "${IPHONE_SDKROOT}/System/Library/Frameworks/OpenGLES.framework")
 
-        #set either the device sdk or the simulator sdk. Can't find away to separate these in the same project
-        IF(OSG_BUILD_PLATFORM_IPHONE)
-            SET (IPHONE_DEVROOT "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer")
-            SET (IPHONE_SDKROOT "${IPHONE_DEVROOT}/SDKs/iPhoneOS${IPHONE_SDKVER}.sdk")
-        ELSE()
-            SET (IPHONE_DEVROOT "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer")
-            SET (IPHONE_SDKROOT "${IPHONE_DEVROOT}/SDKs/iPhoneSimulator${IPHONE_SDKVER}.sdk")
-        ENDIF()
-
-        SET (IPHONE_ENABLE_BITCODE "NO" CACHE STRING "IOS Enable Bitcode")
-
-        # Apple iOS: Find OpenGLES
-        FIND_LIBRARY(OPENGLES_LIBRARY OpenGLES)
     ELSE ()
         FIND_LIBRARY(CARBON_LIBRARY Carbon)
         FIND_LIBRARY(COCOA_LIBRARY Cocoa)
@@ -454,6 +438,9 @@ MARK_AS_ADVANCED(OSG_USE_FLOAT_BOUNDINGSPHERE)
 OPTION(OSG_USE_FLOAT_BOUNDINGBOX "Set to ON to build OpenSceneGraph with float BoundingBox instead of double." ON)
 MARK_AS_ADVANCED(OSG_USE_FLOAT_BOUNDINGBOX)
 
+OPTION(OSG_USE_FLOAT_QUAT "Set to ON to build OpenSceneGraph with float Quat instead of double." OFF)
+MARK_AS_ADVANCED(OSG_USE_FLOAT_QUAT)
+
 IF (WIN32)
     OPTION(OSG_USE_UTF8_FILENAME "Set to ON to use a UTF8 locale for filenames instead of the default locale." OFF)
     MARK_AS_ADVANCED(OSG_USE_UTF8_FILENAME)
@@ -515,6 +502,12 @@ ENDIF()
 
 OPTION(OSG_GL_LIBRARY_STATIC "Set to ON to statically link with OpenGL/GLES library." OFF)
 
+IF (OSG_BUILD_PLATFORM_IPHONE OR ANDROID)
+    OPTION(OSG_TEXT_USE_FONTCONFIG "Set to ON to enable attempt to use FontConfig in osgText." OFF)
+ELSE ()
+    OPTION(OSG_TEXT_USE_FONTCONFIG "Set to OFF to disable attempt to use FontConfig in osgText." ON)
+ENDIF ()
+
 # Map the OSG_GL*_AVAILABLE settings to OSG_GL_* settings
 IF (OSG_GLES2_AVAILABLE OR OSG_GLES3_AVAILABLE OR OSG_GL3_AVAILABLE)
     OPTION(OSG_GL_DISPLAYLISTS_AVAILABLE "Set to OFF to disable use of OpenGL display lists." OFF)
@@ -542,12 +535,12 @@ ELSE()
     OPTION(OSG_CPP_EXCEPTIONS_AVAILABLE "Set to OFF to disable compile of OSG components that use C++ exceptions." ON)
 ENDIF()
 
-SET(OSG_GL_CONTEXT_VERSION "1.0" CACHE STRING "GL Context String to pass when creaing graphics contexts")
 
 # Map the OSG_GL*_AVAILABLE settings to OpenGL header settings
+SET(DEFAULT_GL_CONTEXT_VERSION "1.0")
 IF (OSG_GL3_AVAILABLE)
 
-    SET(OSG_GL_CONTEXT_VERSION "3.3")
+    SET(DEFAULT_GL_CONTEXT_VERSION "3.3")
 
     IF (APPLE)
         SET(OPENGL_HEADER1 "#include <OpenGL/gl.h>" CACHE STRING "#include<> line for OpenGL Header")
@@ -599,6 +592,8 @@ ELSE()
         SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
     ENDIF()
 ENDIF()
+
+SET(OSG_GL_CONTEXT_VERSION ${DEFAULT_GL_CONTEXT_VERSION} CACHE STRING "GL Context String to pass when creaing graphics contexts")
 
 IF (OSG_GL1_AVAILABLE)
     SET(OSG_GL1_FEATURES 1)
@@ -752,7 +747,6 @@ ELSE()
     FIND_PACKAGE(COLLADA)
     FIND_PACKAGE(FBX)
     FIND_PACKAGE(ZLIB)
-    FIND_PACKAGE(OpenVRML)
     FIND_PACKAGE(GDAL)
     FIND_PACKAGE(GTA)
     FIND_PACKAGE(CURL)
@@ -798,9 +792,7 @@ IF   (BUILD_OSG_EXAMPLES AND NOT ANDROID)
 
     FIND_PACKAGE(FLTK)
     FIND_PACKAGE(FOX)
-
-    SET(wxWidgets_USE_LIBS base core gl net)
-    FIND_PACKAGE(wxWidgets)
+    FIND_PACKAGE(wxWidgets COMPONENTS base core gl net)
 
 ENDIF(BUILD_OSG_EXAMPLES AND NOT ANDROID)
 
@@ -891,10 +883,26 @@ IF(CYGWIN)
   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
 ENDIF()
 
-IF(UNIX AND NOT WIN32 AND NOT APPLE)
-  IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-      SET(LIB_POSTFIX "64" CACHE STRING "suffix for 32/64 dir placement")
-      MARK_AS_ADVANCED(LIB_POSTFIX)
+# Set OSG_INSTALL_LIBDIR to specify the installation directories of object code libraries
+IF(DEFINED LIB_POSTFIX)
+  # Use LIB_POSTFIX if defined
+  SET(OSG_INSTALL_LIBDIR lib${LIB_POSTFIX})
+ELSE()
+  IF(CMAKE_VERSION VERSION_LESS "2.8.5")
+    IF(UNIX AND NOT WIN32 AND NOT APPLE)
+      IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
+        SET(LIB_POSTFIX "64" CACHE STRING "suffix for 32/64 dir placement")
+        MARK_AS_ADVANCED(LIB_POSTFIX)
+      ENDIF()
+    ENDIF()
+    IF(NOT DEFINED LIB_POSTFIX)
+      SET(LIB_POSTFIX "")
+    ENDIF()
+    SET(OSG_INSTALL_LIBDIR lib${LIB_POSTFIX})
+  ELSE()
+    # Use the GNU standard installation directories for CMake >= 2.8.5
+    INCLUDE(GNUInstallDirs)
+    SET(OSG_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
   ENDIF()
 ENDIF()
 IF(NOT DEFINED LIB_POSTFIX)
@@ -1105,41 +1113,15 @@ ENDIF()
 
 IF(APPLE AND NOT ANDROID)
 
-        #Here we check if the user specified IPhone SDK
-    IF(OSG_BUILD_PLATFORM_IPHONE OR OSG_BUILD_PLATFORM_IPHONE_SIMULATOR)
+    IF(OSG_BUILD_PLATFORM_IPHONE)
 
-        #set iphone arch and flags taken from http://sites.google.com/site/michaelsafyan/coding/resources/how-to-guides/cross-compile-for-the-iphone/how-to-cross-compile-for-the-iphone-using-cmake
-        IF(OSG_BUILD_PLATFORM_IPHONE)
-            IF(${IPHONE_VERSION_MIN} LESS "7.0")
-                SET(CMAKE_OSX_ARCHITECTURES "armv6;armv7" CACHE STRING "Build architectures for iOS" FORCE)
-                SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-thumb -pipe -no-cpp-precomp" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-            ELSE()
-                SET(CMAKE_OSX_ARCHITECTURES "armv7;armv7s;arm64" CACHE STRING "Build architectures for iOS" FORCE)
-                SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -no-cpp-precomp" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-            ENDIF()
+        # set osg window system to iOS
+        SET(OSG_WINDOWING_SYSTEM "IOS" CACHE STRING "Windowing system type for graphics window creation, options only IOS." FORCE)
 
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -miphoneos-version-min=${IPHONE_VERSION_MIN}" FORCE)
-
-        ELSE()
-            #simulator uses i386 and x86_64 architectures
-            SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64" CACHE STRING "Build architectures for iOS Simulator" FORCE)
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-thumb -pipe -no-cpp-precomp" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mios-simulator-version-min=${IPHONE_VERSION_MIN}" FORCE)
-
-        ENDIF()
-
-        #here we set the specific iphone sdk version. We can only set either device or simulator sdk. So if you want both you currently have to have two separate projects
-        SET(CMAKE_OSX_SYSROOT "${IPHONE_SDKROOT}" CACHE STRING "System root for iOS" FORCE)
-
-        #hack, force link to opengles
-        set(CMAKE_EXE_LINKER_FLAGS "-framework Foundation -framework OpenGLES")
-
-        #use the IPhone windowing system
-        SET(OSG_WINDOWING_SYSTEM "IOS" CACHE STRING "Forced IPhone windowing system on iOS"  FORCE)
+        # set osg default image plugin
         SET(OSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX "imageio" CACHE STRING "Forced imageio default image plugin for iOS" FORCE)
 
-        #I think this or similar will be required for IPhone apps
+        # ensure app bundles for example app
         OPTION(OSG_BUILD_APPLICATION_BUNDLES "Enable the building of applications and examples as OSX Bundles" ON)
 
     ELSE()
@@ -1366,6 +1348,13 @@ IF(NOT OSG_CONFIG_HAS_BEEN_RUN_BEFORE)
 ENDIF()
 
 #-----------------------------------------------------------------------------
+# add clobber build target to clear all the non git registered files/directories
+#-----------------------------------------------------------------------------
+add_custom_target(clobber
+    COMMAND git clean -d -f -x
+)
+
+#-----------------------------------------------------------------------------
 ### uninstall target
 #-----------------------------------------------------------------------------
 CONFIGURE_FILE(
@@ -1376,4 +1365,5 @@ ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 #
-
+include(FeatureSummary)
+feature_summary(WHAT ALL)

@@ -1,6 +1,6 @@
-OpenSceneGraph Library 3.6.2
+OpenSceneGraph Library 3.6.4
 
-568 Contributors:
+570 Contributors:
 
 Firstname Surname
 -----------------
@@ -43,8 +43,8 @@ Chris Hanson
 Roland Smeenk
 Roger James
 Jeremy Moles
-J.P. Delport
 Andy Skinner
+J.P. Delport
 Magnus Kessler
 David Fries
 Tom Jolley
@@ -232,6 +232,7 @@ Dietmar Funck
 Colin Cochran
 Christian Ruzicka
 Christian Buchner
+Chris Djali
 Charles Cole
 Blake Williams
 Björn Hein
@@ -537,9 +538,10 @@ Christophe Herreman
 Christian Noon
 Christian Kaser
 Christian Ehrlicher
+Chris White
 Chris McGlone
-Chris Djali
 Carlos Garcea
+Capostrophic
 Bryce Eldridge
 Bruno Herbelin
 Brian Keener

@@ -288,6 +288,9 @@ Registry::Registry()
     addFileExtensionAlias("terrain", "osgterrain");
     addFileExtensionAlias("view",  "osgviewer");
 
+    //addFileExtensionAlias("vsga", "vsg");
+    //addFileExtensionAlias("vsgb", "vsg");
+
     addFileExtensionAlias("sgi",  "rgb");
     addFileExtensionAlias("rgba", "rgb");
     addFileExtensionAlias("int",  "rgb");
@@ -377,16 +380,16 @@ Registry::Registry()
     addFileExtensionAlias("tif",  "tiff");
 
     // really need to decide this at runtime...
-    #if defined(USE_XINE)
+    #if defined(USE_FFMPEG)
 
-        addFileExtensionAlias("mov",  "xine");
-        addFileExtensionAlias("mpg",  "xine");
-        addFileExtensionAlias("ogv",  "xine");
-        addFileExtensionAlias("mpv",  "xine");
-        addFileExtensionAlias("dv",   "xine");
-        addFileExtensionAlias("avi",  "xine");
-        addFileExtensionAlias("wmv",  "xine");
-        addFileExtensionAlias("flv",  "xine");
+        addFileExtensionAlias("mov",  "ffmpeg");
+        addFileExtensionAlias("mpg",  "ffmpeg");
+        addFileExtensionAlias("ogv",  "ffmpeg");
+        addFileExtensionAlias("mpv",  "ffmpeg");
+        addFileExtensionAlias("dv",   "ffmpeg");
+        addFileExtensionAlias("avi",  "ffmpeg");
+        addFileExtensionAlias("wmv",  "ffmpeg");
+        addFileExtensionAlias("flv",  "ffmpeg");
     #endif
 
     // support QuickTime for Windows

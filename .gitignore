@@ -6,6 +6,10 @@ doc/openthreads.doxyfile
 
 doc/OpenSceneGraphReferenceDocs/
 doc/OpenThreadsReferenceDocs/
+doc/*.chm
+
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
 
 cmake_uninstall.cmake
 
@@ -59,6 +63,10 @@ install_manifest*.txt
 *.out
 *.app
 
+# Automatically generated Package files
+packaging/cmake/*
+configure/*
+
 # Platform Specifics - auto generated files
 PlatformSpecifics/Windows/*.rc
 
@@ -78,6 +86,10 @@ PlatformSpecifics/Windows/*.rc
 # Visual Studio - Browsing Database File
 *.sdf
 *.opensdf
+
+# Visual Studio - Cache/Options Directory
+.vs/
+.vscode/*
 
 #osx xcode
 DerivedData/

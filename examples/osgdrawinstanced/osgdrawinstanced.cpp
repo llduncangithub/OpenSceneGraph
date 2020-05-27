@@ -59,6 +59,7 @@ createStateSet()
     // render each instance uniquely. gl_InstanceID will be in the range
     // 0 to numInstances-1 (1023 in our case).
     std::string vertexSource =
+        "#extension GL_EXT_gpu_shader4 : enable\n"
         "uniform sampler2D osgLogo; \n"
         "uniform float osg_SimulationTime; \n"
 

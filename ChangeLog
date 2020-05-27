@@ -1,3 +1,1635 @@
+Fri, 31 Jan 2020 11:02:47 +0000
+Author : Robert Osfield
+Updates for 3.6.5 release
+
+Fri, 31 Jan 2020 10:37:25 +0000
+Author : Robert Osfield
+Added mutex lock to avoid threading issues when glyphs are added to a Font from multiple threads
+
+Thu, 30 Jan 2020 19:25:50 +0000
+Author : Robert Osfield
+Updates for 3.6.5-rc3
+
+Thu, 30 Jan 2020 16:30:41 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #911 from LaurensVoerman/FbxSdkFixFix for older versions of fbxsdk without xml or zlib libraries,
+
+Thu, 30 Jan 2020 16:21:32 +0000
+Author : Robert Osfield
+Added explicit clean up removeView
+
+Thu, 30 Jan 2020 16:32:42 +0100
+Author : Laurens Voerman
+Fix for older versions of fbxsdk without xml or zlib libraries, fix cmake multiconfig generators (msvc) with irrelevant CMAKE_BUILD_TYPE.
+
+Mon, 27 Jan 2020 10:11:23 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #907 from DeadParrot/OpenSceneGraph-3.6FBX plugin updates / PREFIX-NOTFOUND work-around
+
+Sun, 26 Jan 2020 14:28:56 -0500
+Author : Stuart Mentzer
+FBX plugin updates / PREFIX-NOTFOUND work-around
+
+Tue, 21 Jan 2020 10:11:30 +0000
+Author : Robert Osfield
+Updater rc number for 3.6.5-rc2, and CHangeLog
+
+Tue, 21 Jan 2020 09:43:08 +0000
+Author : Robert Osfield
+Removed stray space
+
+Tue, 21 Jan 2020 09:32:57 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #902 from mp3butcher/oqn3.6 OQN API convergence 
+
+Tue, 21 Jan 2020 09:16:51 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #903 from dedowsdi/renderstageAdd getPreRenderList, getPostRenderList to RenderStage.
+
+Fri, 17 Jan 2020 18:47:49 +0800
+Author : dedowsdi
+Add getPreRenderList getPostRenderList to RenderStage.
+
+Fri, 23 Aug 2019 09:59:54 +0200
+Author : Daniel Trstenjak
+OcclusionQueryNode: make all usages of 'updateDefaultQueryGeometry' thread safe
+
+Fri, 23 Aug 2019 09:46:02 +0200
+Author : Daniel Trstenjak
+OcclusionQueryNode: fix resetting to default query geometryWhen the query geometry gets reset to its default then its
+vertices have to be updated by the bounding box dimensions of
+the current children of the OcclusionQueryNode.
+
+
+Wed, 14 Aug 2019 11:27:40 +0200
+Author : Daniel Trstenjak
+OcclusionQueryNode: fix use case of user defined query geometryThe user defined query geometry handling has been broken in several ways.
+
+The previous way of defining a query geometry was using the non const
+`getQueryGeometry` method and overriding its members. But then
+`OcclusionQueryNode` wasn't aware of the geometry change and couldn't
+internally handle it correctly.
+
+The `computeBound` method never considered a user defined query geometry and
+always just overrode the vertices of the geometry.
+
+The member `_validQueryGeometry` wasn't correctly set.
+
+This change should fix all this issues by introducing a small backward
+compatibility break. The non const `getQueryGeometry` method is removed
+forcing the user to use the `setQueryGeometry` method. But then `OcclusionQueryNode`
+is aware of the user defined query geometry and can handle it correctly.
+
+
+Tue, 29 Jan 2019 14:40:16 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: reset the test result of the invalid geometryThere're cases that the occlusion test result has been retrieved
+after the query geometry has been changed, it's the result of the
+geometry before the change.
+
+
+Tue, 29 Jan 2019 11:37:28 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: ensure a valid query geometryIf the query geometry is invalid then don't do any occlusion queries and
+never traverse the subgraphs.
+
+
+Fri, 25 Jan 2019 15:02:45 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: ensure a consistent value for '_passed'
+
+Sat, 26 Jan 2019 16:33:23 +0000
+Author : Robert Osfield
+Introduced a QueryGeometry::getQueryResult(const osg::Camera*) method as a more informative replacedment for QueryGeometry::getNumPixels().
+
+Mon, 20 Jan 2020 10:37:12 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #900 from dedowsdi/fix_particle_rotationFix particle rotation.
+
+Fri, 17 Jan 2020 11:18:30 +0800
+Author : dedowsdi
+Fix particle rotation.
+
+Fri, 17 Jan 2020 09:28:09 +0000
+Author : Robert Osfield
+Updated ChangeLog
+
+Fri, 17 Jan 2020 09:07:58 +0000
+Author : Robert Osfield
+Moved setting of isftream locale to Model::readOBJ(..) and Model::readMTL(..).
+
+Fri, 17 Jan 2020 08:54:52 +0000
+Author : Robert Osfield
+Added explict setting of local to classic to avoid local platform settings affecting parsing
+
+Tue, 14 Jan 2020 16:32:29 +0000
+Author : Robert Osfield
+Updated README.md for 3.6.5-rc1
+
+Tue, 14 Jan 2020 16:30:14 +0000
+Author : Robert Osfield
+Updated ChangeLog and set rc candidate 1 for 3.6.5-rc1
+
+Tue, 14 Jan 2020 16:29:07 +0000
+Author : Robert Osfield
+Fixed warnings
+
+Tue, 14 Jan 2020 14:57:15 +0000
+Author : Robert Osfield
+Fixed build warning due to auto_ptr<>
+
+Tue, 14 Jan 2020 14:42:01 +0000
+Author : Robert Osfield
+Fixed workaround for invalid indices
+
+Mon, 13 Jan 2020 14:14:48 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #895 from openscenegraph/CurrentThreadIdAdded commment explaining that OpenThreads::Thread::CurrentThread() r…
+
+Mon, 13 Jan 2020 14:12:54 +0000
+Author : Robert Osfield
+Added commment explaining that OpenThreads::Thread::CurrentThread() return NULL on non OpenThreads thread.
+
+Mon, 13 Jan 2020 13:41:37 +0000
+Author : Robert Osfield
+Added support for using CurrentCodePage functionality with osgText::String To the DXF plugin added Option string support for using CurrentCodePage|WidePage, UTF8, UTF16, UTF32 and FontFile=filename
+
+Mon, 13 Jan 2020 09:58:47 +0000
+Author : Robert Osfield
+Added encoding and font setting to dxfText as a first step towards making these user controllable to enble handling of non default settings
+
+Sat, 11 Jan 2020 14:39:46 +0000
+Author : Robert Osfield
+Added creation of image directories when required
+
+Fri, 10 Jan 2020 10:12:13 +0000
+Author : Robert Osfield
+Fixed handling of _autoScaleTransitionWidthRatio<=0.0
+
+Tue, 7 Jan 2020 11:12:18 +0000
+Author : Robert Osfield
+Implemented TextBase::compileGLObjects() with handling of VAO/VBOs to address bugs associated with VAO usage of Text.
+
+Mon, 6 Jan 2020 18:39:51 +0000
+Author : Robert Osfield
+Added Thread::CurrentThreadId() method to wrap up thread id functionality in a more platform appropriate way.
+
+Mon, 6 Jan 2020 10:27:18 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #887 from limbolily/patch-1Fix navagation error about Android GLES2 example.
+
+Mon, 6 Jan 2020 14:48:34 +0800
+Author : limbolily
+Fix navagation error about Android GLES2 example.Android GLES2 example use event queue without initializing window rectangle with graphics context,that produce navigation error.
+
+Mon, 23 Dec 2019 14:20:26 +0100
+Author : Michael Danilov
+Fix #877 "Shift key stuck if both shifts switch keymap"Adapted the patch from https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=687332
+
+
+Mon, 23 Dec 2019 14:53:17 +0000
+Author : Robert Osfield
+Adopted CMake's FindDCMTK.cmake variables
+
+Sun, 22 Dec 2019 12:29:47 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #874 from blobfish/occt7.4Occt7.4
+
+Thu, 19 Dec 2019 11:46:05 -0500
+Author : blobfish
+Plugins: OpenCasCade: Adding 'std' prefix where needed. See Following.Prior to 7.4, occt had a 'using namespace std' in a header file that
+was polluting dependent projects. They have since fixed it and so these
+changes are required.
+
+
+Thu, 19 Dec 2019 10:16:09 -0500
+Author : blobfish
+Plugins: Cmake: OpenCasCade: Changing header used for include directory search. See Following.BRepMesh.hxx is gone in occt 7.4. Now searching for Standard_Version.hxx, which should be more consistent.
+
+
+Wed, 18 Dec 2019 14:25:07 +0000
+Author : Robert Osfield
+Added classic locale setting to avoid local setting of locale affecting the GLSL code generated.
+
+Mon, 16 Dec 2019 17:10:39 +0000
+Author : Robert Osfield
+Updated ChangeLog
+
+Mon, 16 Dec 2019 16:51:16 +0000
+Author : Robert Osfield
+Added automatically removal from the OjbectCache when a object or it's subgraph contain Texture that no longer have an osg::Image.
+
+Mon, 16 Dec 2019 11:54:12 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #871 from LaurensVoerman/commit_tgaFixfix debug compile error for ReaderWriterTGA
+
+Mon, 16 Dec 2019 11:02:41 +0100
+Author : Laurens Voerman
+fix debug compile error for ReaderWriterTGA
+
+Mon, 16 Dec 2019 09:40:30 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #870 from eligovision/OpenSceneGraph-3.6_glext_fixGLExtensions's isPBOSupported and isVAOSupported flags fixed
+
+Mon, 16 Dec 2019 09:40:00 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #869 from eligovision/OpenSceneGraph-3.6_glextAdded FBO GL extensions (useful for mobile VR etc.)
+
+Fri, 13 Dec 2019 19:40:11 +0300
+Author : konstantin.matveyev
+GLExtensions's isPBOSupported and isVAOSupported flags fixed for GLES2+GLES3 configuration
+
+Fri, 13 Dec 2019 19:42:30 +0300
+Author : konstantin.matveyev
+GLExtensions's isInvalidateFramebufferSupported flag improved
+
+Tue, 26 Nov 2019 17:17:38 +0800
+Author : PntAndCnt
+Fontconfig should be external library.Add Fontconfig to TARGET_LIBRARIES cause osg3::osgText target looking for
+openscegraph-Fontconfig-import-targets.cmake, which doesn't exists.
+
+
+Sun, 13 Oct 2019 20:24:36 +0800
+Author : PntAndCnt
+Fix a typo and invisible 3dtext in examples/osgtext.Second text alignment is wrong when "--alignment" specified.
+
+3D text radius is too small, only SCREEN_COORDS can be seen.
+
+Text position should multiply radius.
+
+
+Tue, 3 Sep 2019 16:11:14 +0800
+Author : Kent
+Mered fix for internalFormat
+
+Thu, 12 Dec 2019 18:41:23 +0300
+Author : valid-ptr
+glInvalidateFramebuffer added to GLExtensions
+
+Thu, 31 Oct 2019 18:59:04 +0300
+Author : konstantin.matveyev
+glFramebufferTexture2DMultisample added to GLExtensions
+
+Tue, 10 Dec 2019 15:08:25 +0300
+Author : Dmitry Marakasov
+Add FreeBSD-specific code bits for pthread_setaffinity_np support
+
+Thu, 12 Dec 2019 13:25:44 +0000
+Author : Robert Osfield
+Fix linking with Xinerama
+
+Thu, 12 Dec 2019 13:09:33 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #861 from aluaces/default-ffmpegSet ffmpeg as the default plugin for video files.
+
+Fri, 22 Nov 2019 21:07:36 +0100
+Author : elsid
+Fix clang 8 & libc++ build errorsReplace operators for implicit type conversion by explicit data() method to
+access implementation pointer and subscript operator to access element by
+index just like in std::vector.
+
+src/osgPlugins/tga/ReaderWriterTGA.cpp:455:22: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+        if (colormap == NULL)
+            ~~~~~~~~ ^  ~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:525:16: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+    if (buffer == NULL || linebuf == NULL)
+        ~~~~~~ ^  ~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:525:35: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+    if (buffer == NULL || linebuf == NULL)
+                          ~~~~~~~ ^  ~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:548:30: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+            if (formattedMap == NULL)
+                ~~~~~~~~~~~~ ^  ~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:574:40: error: use of overloaded operator '[]' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                        index = linebuf[x];
+                                ~~~~~~~^~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:577:50: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                        index = getInt16(linebuf + x * 2);
+                                         ~~~~~~~ ^ ~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:580:50: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                        index = getInt24(linebuf + x * 3);
+                                         ~~~~~~~ ^ ~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:583:50: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                        index = getInt32(linebuf + x * 4);
+                                         ~~~~~~~ ^ ~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:592:72: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                        (dest + adjustedX * format)[i] = (formattedMap + index * format)[i];
+                                                          ~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:626:30: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+            if (formattedMap == NULL)
+                ~~~~~~~~~~~~ ^  ~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:642:21: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+            if (buf == NULL)
+                ~~~ ^  ~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:664:44: error: use of overloaded operator '[]' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                            index = linebuf[x];
+                                    ~~~~~~~^~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:667:54: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                            index = getInt16(linebuf + x * 2);
+                                             ~~~~~~~ ^ ~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:670:54: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                            index = getInt24(linebuf + x * 3);
+                                             ~~~~~~~ ^ ~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:673:54: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                            index = getInt32(linebuf + x * 4);
+                                             ~~~~~~~ ^ ~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:688:76: error: use of overloaded operator '+' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'int')
+                            (dest + adjustedX * format)[i] = (formattedMap + index * format)[i];
+                                                              ~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+src/osgPlugins/tga/ReaderWriterTGA.cpp:708:21: error: use of overloaded operator '==' is ambiguous (with operand types 'SafeArray<unsigned char>' and 'long')
+            if (buf == NULL)
+                ~~~ ^  ~~~~
+17 errors generated.
+
+
+Thu, 12 Dec 2019 10:55:35 +0000
+Author : OpenSceneGraph git repository
+Fixed indentation, replacing tabs with spaces
+
+Mon, 4 Nov 2019 05:37:37 +0100
+Author : Tim Moore
+Fix bug in matrix transpose() and transpose3x3The diagonal elements were not copied from the source matrix.
+
+
+Fri, 1 Nov 2019 09:26:28 -0700
+Author : flashk
+Support reading RGB float DDS imagesThe DDS plugin is not able to load floating point RGB images saved out by itself. There doesn't appear to be a fourcc code for RGB float/half-float data, so I added the appropriate entries to the RGBFormat table so the images can be loaded properly.
+
+Thu, 12 Dec 2019 10:08:32 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #851 from LaurensVoerman/submitCpSubImgfix copySubImage crash on compressed files
+
+Wed, 25 Sep 2019 12:16:51 -0500
+Author : DCFennell
+GL_CLAMP_VERTEX_COLOR and GL_CLAMP_FRAGMENT_COLOR deprecated in GL core profile according to OpenGL 4.5 specification.
+
+Mon, 23 Sep 2019 15:05:54 +0200
+Author : Johannes Pabst
+Fix: LuaCallbackObject could form circular references to LuaScriptEngine that prevented its destruction. Destruction of LuaScriptEngine now disarms all callbacks into Lua.
+
+Fri, 13 Sep 2019 12:50:29 +0200
+Author : Riccardo Corsi
+Fbx Plugin: added plugin option to set the target axis system. Default left to OpenGL.
+
+Thu, 12 Sep 2019 13:54:28 -0700
+Author : grdowns
+Add vcpkg installation instructions
+
+Wed, 11 Dec 2019 17:51:02 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #837 from LaurensVoerman/carbonFixfix apple carbon reference
+
+Wed, 11 Dec 2019 17:07:27 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #833 from cj-mcdonald/osga-fixUpdate ReaderWriterOSGA.cpp
+
+Fri, 30 Aug 2019 16:48:25 +0200
+Author : Guilhem Saurel
+fix dae readme
+
+Wed, 11 Dec 2019 16:58:50 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #828 from eligovision/OpenSceneGraph-3.6_ios_build_fixFix build iOS: when using Toolchain or building with Makefiles (not X…
+
+Wed, 11 Dec 2019 16:47:44 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #822 from mp3butcher/patch-32optimize indexed color DDS conversion
+
+Wed, 4 Dec 2019 22:10:46 +0100
+Author : Alberto Luaces
+Set ffmpeg as the default plugin for video files.As xine is not used anymore, there is no plugin in charge of loading
+video files, and osgmovie and other programs are not able to open
+them.
+
+If ffmpeg is present, it is registered for opening video files.
+
+
+Fri, 1 Nov 2019 16:42:50 +0100
+Author : Laurens Voerman
+fix copySubImage crash on compressed files
+
+Wed, 11 Sep 2019 10:22:16 +0200
+Author : Laurens Voerman
+fix apple carbon reference
+
+Mon, 2 Sep 2019 17:43:38 +0100
+Author : Colin McDonald
+Update ReaderWriterOSGA.cppFix typo in osga archives which stops node files working
+
+Fri, 23 Aug 2019 18:31:22 +0300
+Author : Konstantin S. Matveyev
+Fix build iOS: when using Toolchain or building with Makefiles (not Xcode)
+
+Sun, 18 Aug 2019 17:56:51 +0200
+Author : Julien Valentin
+use memcpy instead of union
+
+Sat, 17 Aug 2019 22:05:38 +0200
+Author : Julien Valentin
+optimize conversion with a union
+
+Thu, 22 Aug 2019 14:49:43 +0100
+Author : Robert Osfield
+Removed exlict keyword to address build problems with VS older than 2015.
+
+Sun, 18 Aug 2019 20:14:17 +0200
+Author : Remo E
+Debugging: Hint to debug LoadLibrary issuesThis helps to debug loading dynamic libraries in an environment without implemented "dlopen". For example emscripten with static compiled OSG.
+
+Sat, 17 Aug 2019 20:04:38 +0100
+Author : Robert Osfield
+Merge branch 'OpenSceneGraph-3.6' of https://github.com/openscenegraph/OpenSceneGraph into OpenSceneGraph-3.6
+
+Sat, 17 Aug 2019 20:04:30 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #820 from Capostrophic/ddsDDS plugin: add support for DDPF_PALETTEINDEXED8 pixel format reading
+
+Fri, 16 Aug 2019 13:52:56 +0200
+Author : Björn Blissing
+Fixed spelling error in warning message
+
+Sat, 17 Aug 2019 15:11:49 +0300
+Author : capostrophic
+Fix memory leaks
+
+Sat, 17 Aug 2019 01:43:47 +0300
+Author : capostrophic
+Add support for DDPF_PALETTEINDEXED8 pixel format reading
+
+Fri, 16 Aug 2019 10:27:28 +0100
+Author : Robert Osfield
+Added TKXCAF to find package list
+
+Thu, 15 Aug 2019 20:21:15 +0200
+Author : Julien Valentin
+remove return of local pointer
+
+Fri, 16 Aug 2019 09:35:00 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #818 from mp3butcher/patch-31fix comment block CMake syntax
+
+Thu, 15 Aug 2019 20:46:52 +0200
+Author : Julien Valentin
+fix cmake block comment syntax
+
+Thu, 15 Aug 2019 20:27:05 +0200
+Author : Julien Valentin
+remove unproperly parsed CMake commenthttps://github.com/openscenegraph/OpenSceneGraph/issues/812
+
+Wed, 7 Aug 2019 10:56:59 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #808 from 640kb/OpenSceneGraph-3.6las plugin: fix linking against static boost library under windows
+
+Wed, 7 Aug 2019 09:49:16 +0200
+Author : Daniel Wendt
+las plugin: fix linking against static boost library under windowsSigned-off-by: Daniel Wendt <daniel.wendt@linux.com>
+
+
+Wed, 31 Jul 2019 14:11:59 +0100
+Author : Robert Osfield
+Added a _fontFallback to TextBase to cache any fallback font (usually DefaultFont) that is used when the Textbase::_font is null.
+
+Mon, 29 Jul 2019 13:01:00 +0100
+Author : Robert Osfield
+Replaced GL_QUADS usage with GL_TRIANGLE_STRIP
+
+Mon, 29 Jul 2019 12:29:25 +0100
+Author : Robert Osfield
+Refactored the mesh setup to use GL_TRIANGLE_STIP instead of GL_QUADS
+
+Mon, 29 Jul 2019 09:59:57 +0100
+Author : Robert Osfield
+Updated version to 3.6.5
+
+Mon, 29 Jul 2019 08:57:56 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #804 from eligovision/OpenSceneGraph-3.6_GLQUADS[*] ParticleSystem: Use GL_TRIANGLES instead if GL_QUADS when GL{1,2}…
+
+Fri, 26 Jul 2019 21:14:45 +0300
+Author : Konstantin S. Matveyev
+[*] ParticleSystem: Use GL_TRIANGLES instead if GL_QUADS when GL{1,2} or GLES1 are unavailable
+
+Fri, 26 Jul 2019 12:54:16 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #802 from eligovision/OpenSceneGraph-3.6_osgtext_fcOSG_TEXT_USE_FONTCONFIG cmake option added: Set to ON to enable attem…
+
+Fri, 26 Jul 2019 14:40:47 +0300
+Author : konstantin.matveyev
+OSG_TEXT_USE_FONTCONFIG additional check needed
+
+Fri, 26 Jul 2019 14:09:36 +0300
+Author : konstantin.matveyev
+OSG_TEXT_USE_FONTCONFIG cmake option added: Set to ON to enable attempt to use FontConfig in osgText; Disabled by default for iOS and Android
+
+Thu, 25 Jul 2019 15:10:36 +0100
+Author : Robert Osfield
+UPdated for 3.6.3-rc9
+
+Thu, 25 Jul 2019 14:58:17 +0100
+Author : Robert Osfield
+Changed the #extension enable
+
+Thu, 25 Jul 2019 14:10:01 +0100
+Author : Robert Osfield
+Change the DefaultFont so that it's managemed via the ObjectCache to enabl it to be release and cleared in a central manner. Added call to Registry::releaseGLObjects() to osgViewer/Renderer.cpp to enable automatic clean up of objects in the ObjectCache.
+
+Thu, 25 Jul 2019 12:48:21 +0100
+Author : Robert Osfield
+Added readObject() implementations
+
+Thu, 25 Jul 2019 10:39:34 +0100
+Author : Robert Osfield
+Added ReaderWriterOBJ::readObject(..) implementations to address issue with using osgconv
+
+Mon, 22 Jul 2019 19:22:16 +0100
+Author : Robert Osfield
+Updates for 3.6.4-rc8
+
+Mon, 22 Jul 2019 17:20:10 +0100
+Author : Robert Osfield
+Added handling of iOS and Android to make sure FontConfig is only used for Desktop builds
+
+Fri, 19 Jul 2019 09:20:50 +0100
+Author : Robert Osfield
+Updated for rc7
+
+Fri, 19 Jul 2019 09:10:02 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #797 from wangii/OpenSceneGraph-3.6 fix u64 and i64 allocation, setArray bug 
+
+Fri, 19 Jul 2019 14:06:20 +0800
+Author : Linan Wang
+fix typo
+
+Fri, 19 Jul 2019 13:28:25 +0800
+Author : Linan Wang
+fix u64 and i64 allocation, setArray bug
+
+Thu, 18 Jul 2019 12:44:59 +0100
+Author : Robert Osfield
+Fixed indentation
+
+Thu, 18 Jul 2019 09:13:25 +0800
+Author : Long Huan
+Add OutputTextureFiles OptionAdd OutputTextureFiles Option support Write out the texture images to file
+
+
+Wed, 17 Jul 2019 15:07:38 +0800
+Author : Long Huan
+Update OBJWriterNodeVisitor.cpp
+
+Wed, 17 Jul 2019 14:52:10 +0800
+Author : Long Huan
+fix obj-Plugin export texture fileFix obj-plugin to support export texture file
+
+
+Thu, 18 Jul 2019 12:18:04 +0100
+Author : Robert Osfield
+Added handling of zero radius models
+
+Thu, 18 Jul 2019 11:16:08 +0100
+Author : Robert Osfield
+Removed references OpenVRML plugin
+
+Thu, 18 Jul 2019 11:14:10 +0100
+Author : Robert Osfield
+Removed vrml plugin from build as OpenVRML plugin relies on no longer supported functionality
+
+Thu, 18 Jul 2019 10:34:53 +0100
+Author : Robert Osfield
+Added calls to curl_global_init and curl_global_cleanup to improve the robustness of threaded curl plugin usage
+
+Tue, 16 Jul 2019 13:50:02 +0100
+Author : Robert Osfield
+Updated for rc6
+
+Tue, 16 Jul 2019 11:53:24 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #789 from rhabacker/OpenSceneGraph-3.6cmake: Add find_package module for fontconfig
+
+Tue, 16 Jul 2019 11:32:10 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #791 from aluaces/mingw-osg_windowing_systemAvoid that mingw cross-compilation choosing X11 as the windowing system.
+
+Tue, 16 Jul 2019 11:08:25 +0200
+Author : Alberto Luaces
+Avoid that mingw cross-compilation choosing X11 as the windowing system.I have moved the PROJECT stanza before the conditionals, because
+otherwise expressions like IF(MINGW) always fail.
+
+
+Mon, 15 Jul 2019 18:54:30 +0200
+Author : Ralf Habacker
+cmake: Add summary information to get an idea of what dependencies might be missing
+
+Mon, 15 Jul 2019 18:52:14 +0200
+Author : Ralf Habacker
+cmake: Added find_package module for fontconfig which is not available with cmake < 3.14This file has been taken from cmake 3.14
+
+
+Mon, 15 Jul 2019 17:06:51 +0100
+Author : Robert Osfield
+Updated for 3.6.4-rc5
+
+Mon, 15 Jul 2019 16:16:45 +0100
+Author : Robert Osfield
+Adopted the matrix transformation code from Text
+
+Mon, 15 Jul 2019 16:13:57 +0100
+Author : Robert Osfield
+Added test of picking
+
+Mon, 15 Jul 2019 15:05:05 +0100
+Author : Robert Osfield
+Cuietened down the reporting of failure to find fontconfig
+
+Mon, 15 Jul 2019 14:11:11 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #788 from rhabacker/3.6-obj-plugin-fixes3.6 obj plugin fixes
+
+Tue, 16 Jan 2018 10:23:36 +0100
+Author : Ralf Habacker
+obj plugin: Fix bug not adding first vertex index on writing GL_LINExxx array types
+
+Mon, 15 Jan 2018 14:22:18 +0100
+Author : Ralf Habacker
+obj plugin: Fix not writing material shininess
+
+Mon, 15 Jul 2019 14:29:26 +0200
+Author : Ralf Habacker
+obj plugin: add option "NsIfNotPresent=" for setting the specular exponent of a material if not present
+
+Mon, 25 Sep 2017 13:59:13 +0200
+Author : Ralf Habacker
+obj plugin: Fix bug not using specular color (Ks) for illumination mode > 2See paragraph "Illumination models" at http://paulbourke.net/dataformats/mtl/ for details.
+
+
+Mon, 15 Jul 2019 11:14:47 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #786 from rhabacker/OpenSceneGraph-3.6Fix 'Incorrect default location for true type fonts on openSUSE'
+
+Tue, 2 Jul 2019 22:56:02 +0200
+Author : Ralf Habacker
+Fix 'Incorrect default location for true type fonts on openSUSE'https://github.com/openscenegraph/OpenSceneGraph/issues/778
+
+
+Fri, 12 Jul 2019 17:00:20 +0100
+Author : Robert Osfield
+Added check against any empty _segments to avoid undefined behaviour
+
+Fri, 12 Jul 2019 16:16:43 +0100
+Author : Robert Osfield
+Removed debug info for constructor and destructors
+
+Fri, 12 Jul 2019 16:09:12 +0100
+Author : Robert Osfield
+Added FrameBufferAttachment::resizeGLObjectBuffers(..) and releaseGLObjects(..) methods
+
+Tue, 2 Jul 2019 20:37:02 +0200
+Author : StefanBruens
+Fix wxWidgets COMPONENTS specification, deprecated usage broken with CMake 3.14Current FindWxWidgets.cmake allows to specify OPTIONAL components, unfortunately
+this broke the (deprecated) use of wxWidgets_USE_LIBS.
+
+Fixes: #779
+
+Tue, 2 Jul 2019 20:21:45 +0100
+Author : Robert Osfield
+Updated ChangeLog for rc4
+
+Tue, 2 Jul 2019 20:21:05 +0100
+Author : Robert Osfield
+Updated SO number to refect change to the Drawable header inline method status
+
+Tue, 2 Jul 2019 20:19:05 +0100
+Author : Robert Osfield
+Updated in prep for 3.6.4-rc4
+
+Mon, 1 Jul 2019 16:15:21 +0100
+Author : Colin McDonald
+Trivial change to src/osgSim/LineOfSight.cpp to quieten down an info message in DatabaseCacheReadCallback::readNodeFile.
+
+Mon, 1 Jul 2019 16:12:53 +0100
+Author : Robert Osfield
+Updated release candidate number to 4 in prep for 3.6.4-rc4 release.
+
+Mon, 1 Jul 2019 15:48:29 +0100
+Author : Robert Osfield
+Removed stray tab
+
+Tue, 25 Jun 2019 17:09:46 +1200
+Author : jimcamel
+Fixed bug where FFmpeg Image Stream would stop if paused for more than 10 secondsThe FFmpeg image stream class uses a 10 second timeout between frames to determine if the stream is dead and if so closes it. However, the timeout is determined using the variable lastUpdateTS which stores the last time the publishNewFrame function was called, and if the video has been playing and then is paused for longer than 10 seconds, when it is unpaused this timeout will fire and the stream will be closed, stopping the video playing beyond what has been buffered.
+
+To stop this timeout from happening before the video starts playing, the timeout checks to see if the lastUpdateTS > 0 (at initialization it is set to 0). In this fix, we simply set the value of lastUpdateTS to 0 when the video is unpaused, this will force the check to skip on unpause, and from then on lastUpdateTS will have the correct value again.
+
+The lastUpdateTS variable is private and only used for this one function, so there should be no side effects from the change.
+
+Fri, 7 Jun 2019 12:45:45 +0200
+Author : Riccardo Corsi
+Bugfix due to copy-paste typo which prevented multi uv channel mesh to be imported correctly.
+
+Mon, 1 Jul 2019 13:43:29 +0100
+Author : Robert Osfield
+Fixed layout
+
+Mon, 1 Jul 2019 13:42:33 +0100
+Author : Robert Osfield
+Merge branch 'patch-27' of https://github.com/mp3butcher/OpenSceneGraph into patch-27
+
+Thu, 30 May 2019 23:10:27 +0300
+Author : Alexey Galitsyn
+Fix not checking num lock state when remapping keypad keys on Windows.Num lock state was never checked during remapping keypad keys on Windows.
+Now when num lock is active, keypad numeric keys and keypad delimeter key
+should work as expected (return KEY_KP_0 to KEY_KP_9 and KEY_KP_Decimal
+respectivly).
+
+
+Mon, 1 Jul 2019 12:56:36 +0100
+Author : Robert Osfield
+Restructed the setting of the default osgDB::Options so it doesn't override the ObjectCacheHint setting when a user specified osgDB::Options object is passed in.
+
+Mon, 1 Jul 2019 12:33:21 +0100
+Author : Robert Osfield
+Merge branch 'OpenSceneGraph-3.6_vas' of https://github.com/eligovision/OpenSceneGraph into OpenSceneGraph-3.6_vas
+
+Mon, 1 Jul 2019 12:18:21 +0100
+Author : Robert Osfield
+Couldn't resolve warnings coming from the FBX headers so had to suppress warnings.
+
+Tue, 21 May 2019 13:28:41 +0200
+Author : Laurens Voerman
+replaced "if (apm || !apm->valid())"
+
+Tue, 21 May 2019 13:29:47 +0200
+Author : Laurens Voerman
+fix typo in header guard.
+
+Wed, 15 May 2019 11:49:17 +0200
+Author : Laurens Voerman
+fix typo in ReaderWriterFBX: writObject -> writeObject
+
+Fri, 14 Jun 2019 15:28:46 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #760 from LaurensVoerman/readObjectimplement readObject for all relevant readerWriters
+
+Fri, 14 Jun 2019 15:01:15 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #759 from AnyOldName3/more-tgaVarious TGA improvements
+
+Fri, 14 Jun 2019 14:32:31 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #758 from LaurensVoerman/osgt_indentationfix indentation for osgt files for windows dynamic library build.
+
+Fri, 14 Jun 2019 14:29:32 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #757 from LaurensVoerman/rendererNoRefCountfix compile error if OSGUTIL_RENDERBACKEND_USE_REF_PTR not defined in include/osgUtil/RenderLeaf
+
+Sat, 8 Jun 2019 01:17:21 +0200
+Author : Julien Valentin
+update traversedebug preventing traversal to disable OQN
+
+Fri, 31 May 2019 15:27:18 +0200
+Author : Julien Valentin
+add enable check in traverseQuery
+
+Wed, 15 May 2019 14:35:39 +0300
+Author : Konstantin S. Matveyev
+typo fix
+
+Wed, 15 May 2019 14:27:10 +0300
+Author : valid-ptr
+VertexArrayState's lazy disabling of vertex attributes mechanism major fix: _vertexAttribArrays must be 'shared'
+
+Tue, 14 May 2019 14:25:30 +0200
+Author : Laurens Voerman
+implement readObject for all relevant readerWriters
+
+Mon, 13 May 2019 21:56:07 +0100
+Author : AnyOldName3
+Add support for Targa type 3 and 11 images (greyscale)
+
+Mon, 13 May 2019 17:25:29 +0200
+Author : Laurens Voerman
+fix indentation for osgt files for windows dynamic library build.
+
+Mon, 13 May 2019 17:02:53 +0200
+Author : Laurens Voerman
+fix compile error if OSGUTIL_RENDERBACKEND_USE_REF_PTR not defined in include/osgUtil/RenderLeaf
+
+Sat, 11 May 2019 00:00:41 +0100
+Author : AnyOldName3
+Avoid wasting memory loading optional TGA fields as RLE image data
+
+Fri, 10 May 2019 00:04:49 +0100
+Author : AnyOldName3
+Add support for type 9 (colour mapped, compressed) TGA images.
+
+Fri, 10 May 2019 00:04:08 +0100
+Author : AnyOldName3
+Check TGA footer if present to see if attribute channel contains alpha data
+
+Wed, 8 May 2019 10:17:06 +0100
+Author : Robert Osfield
+Merged ELSEIF fix from master
+
+Tue, 30 Apr 2019 11:03:02 +0200
+Author : Laurens Voerman
+add missing E to ELSIF# Conflicts:
+#	src/osgViewer/CMakeLists.txt
+
+
+Wed, 8 May 2019 00:59:40 +0100
+Author : AnyOldName3
+Consistently check for failed memory allocation
+
+Wed, 8 May 2019 00:56:42 +0100
+Author : AnyOldName3
+Switch to using safe buffers (fixing a memory leak)
+
+Sat, 4 May 2019 01:19:31 +0100
+Author : AnyOldName3
+Cleanup TGA header interpretation* Read the colour map `First Entry Index` field. If non-zero, error out as the format specification is vague as to what it does and different readers interpret it differently.
+* Rename the variable that holds the colour map entry size as the existing name could be misinterpreted as the size of the pointer, not the thing pointed to.
+* Handle images reporting themselves as 15 bits per pixel in the same way as Truevision's example code.
+
+
+Fri, 26 Apr 2019 10:46:04 +0100
+Author : Robert Osfield
+Fixed indentation
+
+Fri, 19 Apr 2019 13:04:35 +0800
+Author : Wei Lisi
+remove tabs
+
+Fri, 5 Apr 2019 14:31:21 -0700
+Author : flashk
+Update fbxRMesh.cpp
+
+Tue, 26 Mar 2019 22:37:50 +0800
+Author : Wei Lisi
+clean up
+
+Tue, 26 Mar 2019 21:01:24 +0800
+Author : Wei Lisi
+fix fbx hierarchy issue
+
+Wed, 28 Nov 2018 14:21:37 -0600
+Author : Derek Quam
+Fix two bugs introduced when removing the Geode visitor from the FBX exporter.In the Geometry visitor, use getNodePath to check if the Geometry node
+is root instead of getNumParents.
+
+Reset the state inside buildFaces to prevent duplication when a
+Group is inside of Group.
+
+
+Tue, 13 Nov 2018 08:47:06 -0600
+Author : Derek Quam
+Fix duplicate geometries in FBX export.The fix to allow the export of orphaned Geometry nodes accidentally
+duplicated those geometry nodes in 'normal' scene trees. This commit
+refactors the code to rely on the visitor to traverse the Geometry as
+opposed to traversing the Geometry in the Geode visit and the Geometry
+visit.
+
+
+Fri, 26 Apr 2019 09:36:51 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #745 from eligovision/OpenSceneGraph-3.6_cmake CMake: OSG_WINDOWING_SYSTEM fixed
+
+Sun, 14 Apr 2019 00:47:36 +0300
+Author : Konstantin S. Matveyev
+CMake: Win32 option added to OSG_WINDOWING_SYSTEM
+
+Sun, 14 Apr 2019 00:04:11 +0300
+Author : valid-ptr
+CMake: OSG_WINDOWING_SYSTEM fixed; FORCE flag removed
+
+Fri, 12 Apr 2019 13:57:35 +0100
+Author : Robert Osfield
+cMerge branch 'OpenSceneGraph-3.6' of https://github.com/openscenegraph/OpenSceneGraph into OpenSceneGraph-3.6
+
+Fri, 12 Apr 2019 13:55:39 +0100
+Author : Robert Osfield
+Added ability to set which tree rendering techniques to build (via --featuers bitmask command line) and output scene to using -o outputfilename.extension command line.
+
+Thu, 11 Apr 2019 12:42:22 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #737 from eligovision/OpenSceneGraph-3.6_androidosgDB::DynamicLibrary: local lib loading on Android fixed
+
+Fri, 29 Mar 2019 16:25:43 +0300
+Author : Konstantin S. Matveyev
+osgDB::DynamicLibrary: local lib loading on Android fixed
+
+Tue, 26 Mar 2019 06:52:09 +0100
+Author : Jeongseok Lee
+Update CMakeModules/FindCOLLADA.cmakeKeeping old style operator to align with OSG CMake 2.8.0 support.
+
+Co-Authored-By: eknabe <44489094+eknabe@users.noreply.github.com>
+
+
+Mon, 25 Mar 2019 14:09:04 +0000
+Author : Robert Osfield
+Added basic load and compile stats collection enabled by --stats command line.
+
+Mon, 25 Mar 2019 12:42:28 +0000
+Author : Robert Osfield
+Added a call to the CullSetting::readCommnadLine(..) to make sure the --NO_CULLING and --VIEW_FRUSTUM, --VIEW_FRUSTUM_SIDES command line parameters are honoured
+
+Mon, 25 Mar 2019 12:40:41 +0000
+Author : Robert Osfield
+Added --NO_CULLING, --VIEW_FRSUTUM and --VIEW_FRUSTUM_SIDES/--vfs command line options for setting the Camera CullingMode value
+
+Wed, 20 Mar 2019 09:09:56 -0700
+Author : Jeongseok Lee
+Update comments and fix cmake version check
+
+Tue, 19 Mar 2019 14:33:42 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #727 from ccochran/OpenSceneGraph-3.6Fixes Android build for osgViewer.
+
+Mon, 18 Mar 2019 08:55:05 -0600
+Author : Colin Cochran
+Fixes osgViewer CMake build for Android.Adds FORCE to overwrite the cached OWG_WINDOWING_SYSTEM variable.
+
+
+Sat, 16 Mar 2019 11:59:28 -0600
+Author : Colin Cochran
+Fixes Android build for osgViewer.Previously, cmake attempted to build cocoa windowing system source even if MAKE_SYSTEM_NAME was set to ANDROID.
+
+
+Fri, 15 Mar 2019 15:46:58 +0300
+Author : Capostrophic
+Replace redundant asCullVisitor usage with a type check
+
+Sat, 16 Mar 2019 11:30:21 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #726 from Capostrophic/linearinterpolatorOverride default behavior for linear vector interpolations
+
+Fri, 15 Mar 2019 21:29:13 +0300
+Author : Capostrophic
+Override default behavior for linear vector interpolations
+
+Tue, 26 Feb 2019 17:19:06 +0000
+Author : Chris Djali
+Resolve OpenGL error caused by confusion between geometry shader implementations.There are two types of Geometry Shaders in OpenGL. One is provided by `GL_EXT_geometry_shader4` and `GL_ARB_geometry_shader4` and requires that certain parameters are set with calls to `glProgramParameteri` before the program is linked. The other is provided by OpenGL 3.2 as a core feature and by the GLES extensions `GL_EXT_geometry_shader` and `GL_OES_geometry_shader` and requires these parameters to be set in the GLSL source itself.
+
+The value of `isGeometryShader4Supported` is being used to determine if the `glProgramParameteri` calls should occur, so it should only be `true` when one of the extensions requiring them is present.
+
+Tue, 5 Mar 2019 09:32:55 -0800
+Author : flashk
+Update StackedTransform.cpp
+
+Sun, 10 Mar 2019 15:43:48 +0300
+Author : Capostrophic
+Avoid unnecessary matrix type conversion in osgParticle
+
+Thu, 14 Mar 2019 10:13:15 +0000
+Author : Robert Osfield
+Removed the optional code path hack
+
+Wed, 13 Mar 2019 20:05:12 +0300
+Author : Capostrophic
+Add OSG_USE_FLOAT_QUAT build option to use single precision quaternions
+
+Thu, 14 Mar 2019 09:39:40 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #724 from AnyOldName3/more-gitignoreAdd missing files to .gitignore
+
+Wed, 13 Mar 2019 23:13:41 +0000
+Author : AnyOldName3
+Add Visual Studio cache/options directory to .gitignore
+
+Wed, 13 Mar 2019 23:13:00 +0000
+Author : AnyOldName3
+Add missing documentation build files to .gitignore
+
+Mon, 25 Feb 2019 15:06:54 +0000
+Author : Robert Osfield
+Streamline the animation path completion message
+
+Tue, 29 Jan 2019 14:40:16 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: reset the test result of the invalid geometryThere're cases that the occlusion test result has been retrieved
+after the query geometry has been changed, it's the result of the
+geometry before the change.
+
+
+Tue, 29 Jan 2019 11:37:28 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: ensure a valid query geometryIf the query geometry is invalid then don't do any occlusion queries and
+never traverse the subgraphs.
+
+
+Mon, 4 Feb 2019 14:46:42 +0100
+Author : Björn Blissing
+Add search location for textures in FBX pluginThe FBX plugin may fail texture lookup even if the texture is located in
+the same folder as the model file. This change tries, as a last resort,
+to check if the texture filename is available in the same folder as the
+model.
+
+
+Wed, 20 Feb 2019 16:54:23 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #704 from mp3butcher/patch-24uncomment INLINE_DRAWABLE_DRAW
+
+Wed, 20 Feb 2019 16:31:58 +0000
+Author : Robert Osfield
+Added override for broken bindings
+
+Mon, 28 Jan 2019 01:40:35 +0100
+Author : Julien Valentin
+uncomment INLINE_DRAWABLE_DRAW
+
+Sat, 26 Jan 2019 19:36:30 +0000
+Author : Robert Osfield
+Updates for 3.6.4-rc3
+
+Sat, 26 Jan 2019 18:21:47 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #702 from mp3butcher/fix36add MeshReindexation flag
+
+Sat, 26 Jan 2019 18:10:44 +0000
+Author : Robert Osfield
+Added missing {} to fix getPassed() bug introducted by previus commit
+
+Fri, 25 Jan 2019 15:02:45 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: ensure a consistent value for '_passed'
+
+Sat, 26 Jan 2019 16:33:23 +0000
+Author : Robert Osfield
+Introduced a QueryGeometry::getQueryResult(const osg::Camera*) method as a more informative replacedment for QueryGeometry::getNumPixels().
+
+Wed, 23 Jan 2019 12:10:00 +0100
+Author : Daniel Trstenjak
+OcclusionQueryNode: add resetting of queriesIf there's a big view change then it might not be appropriate to wait
+for '_queryFrameCount' till the next query is issued, because then
+geometry might pop into the view after '_queryFrameCount'.
+
+This is especially important for applications not having a constant
+frame rate, but just issue a new frame on demand.
+
+
+Wed, 23 Jan 2019 17:06:04 +0100
+Author : mp3butcher
+fix variable name
+
+Fri, 17 Aug 2018 09:22:40 +0100
+Author : OpenSceneGraph git repository
+Changed member variable name to be consistent with header
+
+Fri, 17 Aug 2018 09:21:31 +0100
+Author : OpenSceneGraph git repository
+Changed the member variable to be consistent with the method name.
+
+Thu, 16 Aug 2018 00:18:24 +0200
+Author : mp3butcher
+add a bool parameter to allow forced reindexation of a mesh
+
+Wed, 23 Jan 2019 15:40:13 +0000
+Author : Robert Osfield
+Commented out the reset of the _vertexArrayObject = 0 as it was break later State::resetCurrentVertexArrayStateOnMatch() calls ability to reset the State::_currentVAO when required.
+
+Wed, 23 Jan 2019 08:52:11 +0000
+Author : Robert Osfield
+Fixed typo
+
+Tue, 22 Jan 2019 20:21:56 +0000
+Author : Robert Osfield
+Added separate test and rest of _currentVAO to State::resetCurrentVertexArrayStateOnMatch(..) method
+
+Mon, 21 Jan 2019 18:13:43 +0000
+Author : Robert Osfield
+Changed resetCurrentVertexArrayStateOnMatch() to reset  _vas tp _globalVertexArrayState and currentVAO to 0.
+
+Mon, 21 Jan 2019 17:36:40 +0000
+Author : Robert Osfield
+Added reset of the State::CurrentVertexArrayState() to prevent the State::_vas becoming a dangling pointer when VertexArrayState objects are deleted.
+
+Sat, 19 Jan 2019 16:16:53 +0000
+Author : Robert Osfield
+Added calling of releaseGLObjects() and resizeGLObjects() to the Camera DrawCallback's to enable the draw callbacks to clean up their own GL objects.
+
+Thu, 17 Jan 2019 17:24:22 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #693 from LaurensVoerman/glObj_C4250fix MSVC warning C4250: inherits 'X' via dominance (94x)
+
+Thu, 17 Jan 2019 16:22:51 +0100
+Author : Laurens Voerman
+fix MSVC warning C4250: inherits 'X' via dominance (94x)
+
+Mon, 14 Jan 2019 11:55:24 +0000
+Author : Robert Osfield
+Added derpecated and thread unsafe warning message to docs of ObjectCache::getgetFromObjectCache()
+
+Mon, 14 Jan 2019 10:23:05 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #691 from LaurensVoerman/clrObjCacheclear temp objectCache in databaseRequest
+
+Mon, 14 Jan 2019 09:55:00 +0000
+Author : Robert Osfield
+Added using to quieten VS warnings
+
+Mon, 14 Jan 2019 10:19:41 +0100
+Author : Laurens Voerman
+clear temp objectCache in databaseRequest
+
+Sat, 12 Jan 2019 11:27:18 +0000
+Author : Robert Osfield
+Moved resizeGLObjects/releaseGLObjects out of Referenced to avoid multiple inheritance warnings
+
+Thu, 10 Jan 2019 09:45:32 +0000
+Author : Robert Osfield
+Added read/writeObject() entry point to FBX plugin.
+
+Wed, 9 Jan 2019 10:22:54 +0000
+Author : Robert Osfield
+Upated ChangeLog
+
+Wed, 9 Jan 2019 10:19:34 +0000
+Author : Robert Osfield
+Updated for 3.6.4-rc2
+
+Wed, 9 Jan 2019 08:51:29 +0000
+Author : Robert Osfield
+Added cmake package configuration files to gitignore
+
+Wed, 9 Jan 2019 08:43:08 +0000
+Author : Robert Osfield
+Replaced use of heap with use of stack created ifstream to avoid potential memory leak
+
+Wed, 9 Jan 2019 08:38:16 +0000
+Author : Robert Osfield
+Introduced use of ref_ptr<> and private destructor to tighen up memory management and avoid users attempting to inappropriately delete TexCoordRange.
+
+Tue, 8 Jan 2019 19:32:50 +0000
+Author : Robert Osfield
+Fixed for crashes on exit associaciated with VAO usage and vairous niche usage cases
+
+Mon, 7 Jan 2019 17:46:02 +0000
+Author : Robert Osfield
+Fixed crash on exit issues with osgFX, osgParticle, osgSim and the osgforest example
+
+Mon, 7 Jan 2019 10:25:13 +0000
+Author : Robert Osfield
+Merged changes from master
+
+Fri, 4 Jan 2019 09:22:12 +0000
+Author : Robert Osfield
+Updated rc number for 3.6.4 release candidate
+
+Fri, 4 Jan 2019 09:10:39 +0000
+Author : Robert Osfield
+Updated ChangeLog and AUTHORS in prep for 3.6.4 work
+
+Fri, 4 Jan 2019 08:10:15 +0000
+Author : Robert Osfield
+Added use of sizeof to make code a bit more flexible
+
+Fri, 4 Jan 2019 08:08:07 +0000
+Author : Robert Osfield
+Restructured the clean up of arrays/primitives and GL objects
+
+Mon, 31 Dec 2018 11:06:45 +0000
+Author : Robert Osfield
+Changed the clean up of the GL objects on destruction so that the destructors of the arrays/primitives themselves do the release rather than have it done explictly in the destructor.  This allows arrays/primitives to be shared.
+
+Thu, 20 Dec 2018 08:46:12 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #679 from mp3butcher/patch-18setup camera Read/Draw Buffer
+
+Wed, 19 Dec 2018 18:30:26 +0100
+Author : Julien Valentin
+setup camera Read/Draw Bufferfix flickering shadows in SingleThread
+
+Fri, 14 Dec 2018 09:14:26 +0000
+Author : Robert Osfield
+Removed examples from build as it was causing travis to timeout
+
+Thu, 13 Dec 2018 14:06:51 +0000
+Author : OpenSceneGraph git repository
+Fixed indentation
+
+Thu, 13 Dec 2018 08:31:27 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #671 from mp3butcher/patch-16remove useless code
+
+Thu, 13 Dec 2018 08:01:24 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #672 from ccochran/OpenSceneGraph-3.6Xcode 9/10 build fixes for OSG 3.6
+
+Tue, 11 Dec 2018 23:56:47 +0100
+Author : Julien Valentin
+remove dead code
+
+Mon, 23 Jul 2018 23:52:16 +0100
+Author : Thomas Hogarth
+removed ios simulator reference, adjusted readme
+
+Tue, 10 Jul 2018 02:09:28 +0100
+Author : Thomas Hogarth
+Improved iOS cmake support for xcode 9.4 and cmake 3.11
+
+Fri, 7 Dec 2018 14:53:52 +0000
+Author : OpenSceneGraph git repository
+Merge pull request #670 from emminizer/four-byte-utf8osgText::String:createUTF8EncodedString() now supports 4-byte UTF-8 strings (code points over 0x100000)
+
+Thu, 6 Dec 2018 14:07:55 -0500
+Author : Daniel Emminizer
+osgText::String:createUTF8EncodedString() now supports 4-byte UTF-8 strings (code points over 0x100000).
+
+Tue, 20 Nov 2018 16:12:21 -0800
+Author : flashk
+Prefer FOURCC pixel format in DDS loaderI have found that certain image editing programs export DDS images with both the DDPF_FOURCC and DDPF_RGB pixel format flags. The DDS loader will give preference to the DDPF_RGB flag and try to deduce the format from the RGB bit mask values instead of using the more reliable FOURCC flag. This causes some images to not load, even though the FOURCC flag is supported.  I've modified the loader so that it checks for the DDPF_FOURCC flag first, then falls back on deducing the format from the RGB bit masks.
+
+Tue, 20 Nov 2018 14:24:24 +0000
+Author : Robert Osfield
+Added, currently commented out, alias for .vsga and .vsgb to help with automatic loading a vsg plugin when .vsga and .vsgb files are encountered.
+
+Tue, 20 Nov 2018 14:19:37 +0000
+Author : Robert Osfield
+Added support for reading and writing images
+
+Sun, 11 Nov 2018 10:14:50 +0000
+Author : Robert Osfield
+Restructed the setting of the OSG_GL_CONTEXT_VERSION to allow script to set it's default value
+
+Fri, 9 Nov 2018 11:28:57 +0000
+Author : Robert Osfield
+Added make clobber target, imported in from the VSG project.
+
+Fri, 9 Nov 2018 11:25:16 +0000
+Author : Robert Osfield
+Removed 12 year old workaround that is no longer required and was causing a misleading info message  "OpenGL extension '' is not supported." to be reported.
+
+Fri, 2 Nov 2018 08:34:43 +0000
+Author : OpenSceneGraph git repository
+Replaced tabs with spaces to fix indentation
+
+Thu, 1 Nov 2018 10:49:40 -0700
+Author : flashk
+Fix handling of alpha values in animated gifsThe gif loader was incorrectly setting pixels as transparent in certain animated gifs. It was ignoring the disposal method value in the extension block and always overwriting the alpha value in each frame. It is common for some animated gifs to set the disposal method so that the previous alpha value is retained. This patch modifies the loader to respect the disposal method flag.
+
+Thu, 1 Nov 2018 09:13:43 +0000
+Author : Robert Osfield
+Removed reprecated C++ usage
+
+Mon, 29 Oct 2018 07:22:50 +0100
+Author : Emil Knabe
+Added support for FBX 2019
+
+Tue, 23 Oct 2018 08:44:55 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #649 from LaurensVoerman/3.6-dae3.6 dae
+
+Fri, 12 Oct 2018 13:25:13 -0700
+Author : flashk
+Update daeRMaterials.cpp
+
+Fri, 12 Oct 2018 13:23:23 -0700
+Author : flashk
+Update daeReader.h
+
+Wed, 17 Oct 2018 15:55:10 +0100
+Author : Robert Osfield
+Added check under Windows for a concatinated path that exceeds the MAX_PATH so that it isn't used for file IO operations that could lead to undefined behavior https://github.com/openscenegraph/OpenSceneGraph/issues/634
+
+Mon, 15 Oct 2018 11:03:54 -0700
+Author : flashk
+Update ReaderWriterDAE.cpp
+
+Thu, 11 Oct 2018 16:13:01 -0700
+Author : flashk
+Fix crash in Collada loaderThe collada loader would crash when processing effects that didn't have a technique defined.
+
+Wed, 10 Oct 2018 02:33:47 +0300
+Author : Boris Pek
+fix builds with case sensitive includesTested during cross-compilation for MS Windows using MinGW.
+
+
+Wed, 10 Oct 2018 13:10:55 +0100
+Author : Robert Osfield
+Fixed buld
+
+Wed, 10 Oct 2018 08:31:30 +0200
+Author : Antoine Lavenant
+fix apply once
+
+Wed, 3 Oct 2018 14:21:03 -0700
+Author : flashk
+Fix for HDR DDS imagesThe DDS loader was not applying the correct internal format for certain HDR images (e.g. float/half_float formats)
+
+Wed, 3 Oct 2018 14:12:54 -0700
+Author : flashk
+osgDB::OutputStream write array optimizationI've made a change to osgDB::OutputStream::writeArrayImplementation so that it writes the array data in a single write operation for binary files. This significantly speeds up writing out osgb files for large data sets (e.g. point clouds). osgDB::InputStream already performs a similar optimization when reading array data from binary files.
+
+Wed, 3 Oct 2018 11:32:10 -0700
+Author : flashk
+Fix for GifImageStream::setReferenceTimeSetting the reference time greater than the duration of a gif would cause a crash. Also, the current reference time is not immediately updated when manually setting the reference time.
+
+Wed, 3 Oct 2018 09:59:34 -0700
+Author : flashk
+Update ReaderWriterFBX.cpp
+
+Wed, 3 Oct 2018 09:52:10 -0700
+Author : flashk
+Update fbxRMesh.cpp
+
+Wed, 3 Oct 2018 09:49:37 -0700
+Author : flashk
+Update fbxReader.h
+
+Tue, 2 Oct 2018 09:04:26 -0700
+Author : flashk
+Fix hardware mipmap generation for cube mapsI was getting a black image when enabling hardware mipmap generation on cubemaps. I believe the problem is that the base Texture class is hard coding GL_TEXTURE_2D when enabling mipmap generation, instead of using the target type from the derived class.
+
+Tue, 2 Oct 2018 12:21:31 +0100
+Author : Robert Osfield
+Removed unused static variables
+
+Tue, 2 Oct 2018 11:28:34 +0100
+Author : Robert Osfield
+From Andy Skinner, Added ~GLExtensions to clear cached values for context ID
+
+Mon, 1 Oct 2018 23:13:10 +0200
+Author : Julien Valentin
+add version and required extensionlet a chance to work on intel chipset
+
+Tue, 2 Oct 2018 10:46:25 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #627 from eligovision/OpenSceneGraph-3.6_gui_adapters_1px1px error in GUIEventAdapter, View, Viewer and CompositeViewer major fix
+
+Fri, 21 Sep 2018 13:26:18 +0300
+Author : Konstantin S. Matveyev
+1px error in GUIEventAdapter, View, Viewer and CompositeViewer major fix
+
+Fri, 14 Sep 2018 11:16:53 +0100
+Author : Robert Osfield
+Updated ChangeLog for 3.6.3 release
+
+Fri, 14 Sep 2018 10:41:24 +0100
+Author : Robert Osfield
+Updated version number and date for 3.6.3 stable release
+
+Thu, 13 Sep 2018 08:52:21 +0100
+Author : Robert Osfield
+Updated ChangeLog for 3.6.3-rc3
+
+Thu, 13 Sep 2018 08:47:17 +0100
+Author : Robert Osfield
+Updated for 3.6.3-rc3
+
+Wed, 12 Sep 2018 17:45:49 +0100
+Author : Robert Osfield
+Standardized the glTexStorage*() calls to use osg::maximum(_numMipmapLevels,1) of rnumber of mipmaps to keep the usage consistent. Fixed the erronous Texture2DArray glTexStorage call so that it used the _numMipmapLevels as above to resolve bug in allocation.
+
+Tue, 11 Sep 2018 15:32:44 +0100
+Author : Robert Osfield
+Warning fixes
+
+Tue, 11 Sep 2018 12:29:40 +0100
+Author : Robert Osfield
+Fixed warning
+
+Tue, 11 Sep 2018 12:23:01 +0100
+Author : Robert Osfield
+Updated for 3.6.3-rc2
+
+Tue, 11 Sep 2018 11:56:04 +0100
+Author : Robert Osfield
+Updated rc number 2 for 3.6.3-rc2
+
+Tue, 11 Sep 2018 11:29:36 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #620 from LaurensVoerman/txt_SCREEN_COORDSfix scale problem for osgText with characterSizeMode SCREEN_COORDS and _position set.
+
+Tue, 11 Sep 2018 11:23:34 +0100
+Author : Robert Osfield
+Fixed hang using a ReentrantMutex
+
+Tue, 11 Sep 2018 10:13:49 +0100
+Author : Robert Osfield
+Fixed build
+
+Tue, 11 Sep 2018 09:31:35 +0100
+Author : Robert Osfield
+Fixed build
+
+Tue, 11 Sep 2018 09:03:01 +0100
+Author : Robert Osfield
+Cleaned up code
+
+Mon, 10 Sep 2018 08:00:41 -0400
+Author : gwaldron
+osgText: fixed thread-safety issues in Glyph and Font
+
+Sat, 8 Sep 2018 18:18:33 +0200
+Author : mp3butcher
+fix examples context creation for X11 (when display not :0.0)
+
+Tue, 11 Sep 2018 08:34:20 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #619 from mathieu/topic/SaveInlinedImagesAdded saving of inline Images without having the physical image file.
+
+Tue, 11 Sep 2018 08:11:27 +0100
+Author : Robert Osfield
+Added greater control of how cubemap is set up and controlled
+
+Fri, 7 Sep 2018 15:09:15 +0200
+Author : Laurens Voerman
+fix scale problem for osgText with characterSizeMode SCREEN_COORDS and _position set.
+
+Fri, 7 Sep 2018 14:04:41 +0200
+Author : Mathieu MARACHE
+Added saving of inline Images without having the physical image file.The can be read from and inlined image file
+
+
+Thu, 6 Sep 2018 12:30:18 +0100
+Author : Robert Osfield
+Merge branch 'OpenSceneGraph-3.6' of https://github.com/openscenegraph/OpenSceneGraph into OpenSceneGraph-3.6
+
+Thu, 6 Sep 2018 12:29:44 +0100
+Author : Robert Osfield
+Updated for 3.6.3-rc1
+
+Thu, 6 Sep 2018 11:50:21 +0100
+Author : Robert Osfield
+Fixed memory leak with assignment of default value to ObjectSerializer
+
+Wed, 5 Sep 2018 18:06:25 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #616 from eligovision/OpenSceneGraph-3.6_particlesParticleSystem: Added support for GLES2 and upper (GL_QUADS -> GL_TRI…
+
+Wed, 5 Sep 2018 18:01:33 +0100
+Author : Robert Osfield
+Fixed copy constructor
+
+Wed, 5 Sep 2018 19:00:29 +0300
+Author : Konstantin S. Matveyev
+ParticleSystem: Using of GL_TRIANGLES for GLES2 and upper; GL_QUADS otherwise
+
+Wed, 5 Sep 2018 14:04:57 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #617 from aluaces/Image_scaleImage_typoFix typo in the initial check of Image::scaleImage().
+
+Wed, 5 Sep 2018 13:27:35 +0200
+Author : Alberto Luaces
+Fix typo in the initial check of Image::scaleImage().
+
+Wed, 5 Sep 2018 14:00:09 +0300
+Author : Konstantin S. Matveyev
+ParticleSystem: Added support for GLES2 and upper (GL_QUADS -> GL_TRIANGLES)
+
+Tue, 4 Sep 2018 10:35:38 -0400
+Author : Jason Beverage
+Protect the _programSet in Shader with a mutex. This prevents thread safety issues when Shader objects are used in multiple programs.
+
+Wed, 5 Sep 2018 09:33:24 +0100
+Author : Robert Osfield
+Updated ChangeLog
+
+Tue, 4 Sep 2018 15:26:30 +0100
+Author : Robert Osfield
+Changed the ShapeDrawable::build() methpd so that it does run when the ShadpwDrawabe is a KdTree.
+
+Tue, 4 Sep 2018 14:13:32 +0100
+Author : Robert Osfield
+Updated SO version as XmlNode::Input changes change the ABI
+
+Tue, 4 Sep 2018 12:19:14 +0100
+Author : Robert Osfield
+Added support for reading UTF-8 encoded of xml files
+
+Mon, 3 Sep 2018 12:30:02 +0100
+Author : Robert Osfield
+Changed the logic for whether to call setUpThreading() in setThreadingModel() to make it possible to changed threadings even if the threading model starts of as SingleThreaded
+
+Mon, 3 Sep 2018 11:19:50 +0100
+Author : Robert Osfield
+Updated version number to 3.6.3 in prep for next naintainance release
+
+Mon, 3 Sep 2018 10:16:45 +0100
+Author : Robert Osfield
+Merge branch 'OpenSceneGraph-3.6-TexStorage' into OpenSceneGraph-3.6
+
+Mon, 3 Sep 2018 09:37:36 +0100
+Author : Robert Osfield
+Added reset of _stateset to prevent the releaseGLObjects calling release on th StateSet from the destructor
+
+Mon, 3 Sep 2018 09:37:36 +0100
+Author : Robert Osfield
+Added reset of _stateset to prevent the releaseGLObjects calling release on th StateSet from the destructor
+
+Tue, 28 Aug 2018 11:22:57 +0100
+Author : Robert Osfield
+Replaced the glSGetProcAddressARB code with the dlsym() usage as the NVidia driver looks to be returning non NULL pointers for invalid function names.
+
+Tue, 28 Aug 2018 11:22:57 +0100
+Author : Robert Osfield
+Replaced the glSGetProcAddressARB code with the dlsym() usage as the NVidia driver looks to be returning non NULL pointers for invalid function names.
+
+Wed, 22 Aug 2018 11:13:11 +0100
+Author : Robert Osfield
+Enabled point sprite validty modes.
+
+Wed, 22 Aug 2018 11:13:11 +0100
+Author : Robert Osfield
+Enabled point sprite validty modes.
+
+Wed, 22 Aug 2018 10:42:18 +0100
+Author : Robert Osfield
+Merged fix for PointSprite modes validity checks from master.
+
+Wed, 22 Aug 2018 10:42:18 +0100
+Author : Robert Osfield
+Merged fix for PointSprite modes validity checks from master.
+
+Tue, 21 Aug 2018 09:38:03 -0400
+Author : plevy
+Change GL_RGBA16F to  GL_RGBA16F_ARB to fix Windows BuildChange GL_RGBA16F to  GL_RGBA16F_ARB to fix Windows build.
+
+Tue, 21 Aug 2018 09:38:03 -0400
+Author : plevy
+Change GL_RGBA16F to  GL_RGBA16F_ARB to fix Windows BuildChange GL_RGBA16F to  GL_RGBA16F_ARB to fix Windows build.
+
+Tue, 21 Aug 2018 09:19:50 +0100
+Author : Robert Osfield
+Replaced GL_RGBA32F with GL_RGBA32F_ARB to fix Windows build
+
+Tue, 21 Aug 2018 09:19:50 +0100
+Author : Robert Osfield
+Replaced GL_RGBA32F with GL_RGBA32F_ARB to fix Windows build
+
+Mon, 20 Aug 2018 10:08:09 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #606 from mp3butcher/OpenSceneGraph-3.6-TexStorageOpen scene graph 3.6 tex storage
+
+Mon, 20 Aug 2018 05:10:11 +0200
+Author : mp3butcher
+complete TexStorage support
+
+Mon, 20 Aug 2018 04:50:14 +0200
+Author : mp3butcher
+add more extensions
+
+Sun, 19 Aug 2018 22:46:10 +0200
+Author : mp3butcher
+remove redondant variable and test
+
+Fri, 17 Aug 2018 16:51:55 +0100
+Author : Robert Osfield
+Removed check as this is better outside of the function
+
+Fri, 17 Aug 2018 12:20:59 +0100
+Author : Robert Osfield
+Created a GLenum Texture::selectSizedInternalFormat(const osg::Image* image=0) const method to help clean up set up of glTexStorage. Fixed typo.
+
+Fri, 17 Aug 2018 10:31:46 +0100
+Author : Robert Osfield
+Merged changes to InternalPixelRelations sizedInternalFormats[] from master
+
+Thu, 16 Aug 2018 19:23:17 +0100
+Author : Robert Osfield
+Fixed memory leak associated with VertexArrayStte objects not getting released on destruction of Geometry/Drawables.
+
+Wed, 8 Aug 2018 14:42:04 +0100
+Author : Robert Osfield
+From Chris White, Cygwin build fix
+
+Wed, 8 Aug 2018 15:05:53 +0300
+Author : Vic-Min
+Renamed USE_DEPRECATED_API to OSG_USE_DEPRECATED_API
+
+Tue, 31 Jul 2018 16:58:41 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #583 from emminizer/flt-registry-cacheOpenFlight: Replace internal caches with osgDB::ObjectCache use.  Fix…
+
+Tue, 31 Jul 2018 11:45:33 -0400
+Author : Daniel Emminizer
+OpenFlight: Replace internal caches with osgDB::ObjectCache use.  Fixes unbounded memory growth when using readNode(std::istream&, ...) method.
+
+Tue, 31 Jul 2018 09:13:20 +0100
+Author : Robert Osfield
+Removed unneccessary FIX ME statement.
+
+Fri, 27 Jul 2018 17:34:30 +0100
+Author : Robert Osfield
+Fixed check against dataType changes
+
+Wed, 25 Nov 2015 09:36:15 +1100
+Author : Alex Burton
+updated osgviewerWX to remove deprecated calls in wxWidgets 3.x
+
+Mon, 9 Jul 2018 17:55:38 +0100
+Author : OpenSceneGraph git repository
+Merge pull request #573 from emminizer/fix-flt-typoFLT: Fix texture unit typo and code style from PR 568.
+
+Mon, 9 Jul 2018 06:34:41 -0400
+Author : Daniel Emminizer
+FLT: Fix texture unit typo and code style from PR 568.
+
+Fri, 29 Jun 2018 10:56:35 +0100
+Author : Robert Osfield
+Updated ChangeLog for 3.6.2 release
+
 Fri, 29 Jun 2018 10:56:01 +0100
 Author : Robert Osfield
 Updated date for 3.6.2 releases

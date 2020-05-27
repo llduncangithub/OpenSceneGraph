@@ -139,7 +139,34 @@ osg::VertexArrayState* TextBase::createVertexArrayStateImplementation(osg::Rende
 
 void TextBase::compileGLObjects(osg::RenderInfo& renderInfo) const
 {
-    Drawable::compileGLObjects(renderInfo);
+    State& state = *renderInfo.getState();
+    if (renderInfo.getState()->useVertexBufferObject(_supportsVertexBufferObjects && _useVertexBufferObjects))
+    {
+        unsigned int contextID = state.getContextID();
+        GLExtensions* extensions = state.get<GLExtensions>();
+        if (state.useVertexArrayObject(_useVertexArrayObject))
+        {
+            VertexArrayState* vas = 0;
+
+            _vertexArrayStateList[contextID] = vas = createVertexArrayState(renderInfo);
+
+            State::SetCurrentVertexArrayStateProxy setVASProxy(state, vas);
+
+            state.bindVertexArrayObject(vas);
+
+            drawImplementation(renderInfo);
+
+            state.unbindVertexArrayObject();
+        }
+        else
+        {
+            drawImplementation(renderInfo);
+        }
+
+        // unbind the BufferObjects
+        extensions->glBindBuffer(GL_ARRAY_BUFFER_ARB,0);
+        extensions->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER_ARB,0);
+    }
 }
 
 void TextBase::resizeGLObjectBuffers(unsigned int maxSize)
@@ -513,7 +540,7 @@ bool TextBase::computeMatrix(osg::Matrix& matrix, osg::State* state) const
                 height = static_cast<value_type>(viewport->height());
             }
 
-            osg::Matrix mvpw = rotate_matrix * modelview * projection * osg::Matrix::scale(width/2.0, height/2.0, 1.0);
+            osg::Matrix mvpw = rotate_matrix * osg::Matrix::translate(_position) * modelview * projection * osg::Matrix::scale(width/2.0, height/2.0, 1.0);
 
             osg::Vec3d origin = osg::Vec3d(0.0, 0.0, 0.0) * mvpw;
             osg::Vec3d left = osg::Vec3d(1.0, 0.0, 0.0) * mvpw - origin;
